@@ -10,19 +10,21 @@
 * 電機五 b03901056 孫凡耕
 
 ## Usage
-./master_device : the device moudule for master server
+``./master_device`` : the device moudule for master server
 
-./slave_device  : the device moudule for slave client
+``./slave_device``  : the device moudule for slave client
 
-./ksocket: the device moudule including the funtions used for kernel socket
+``./ksocket``: the device moudule including the funtions used for kernel socket
 
-./data   : input/output data
+``./data``   : input/output data
 
-./user_program : the user program "master" and "slave"
+``./user_program`` : the user program "master" and "slave"
 
 
-To use it, please:
 
+
+To use it, please: 
+```
 1.change to super user
 
 2.execute "./compile.sh" to compile codes and install modules(if you want to run the bonus, please execute ./compile_bonus.sh)
@@ -31,8 +33,9 @@ To use it, please:
 
 i.e.
 ./master ../data/file1_in mmap
-
 ./slave ../data/file1_out fcntl 127.0.0.1
+```
+
 
 Make sure that you are under the path "./user_program" when you execute user programs.
 
