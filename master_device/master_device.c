@@ -97,8 +97,8 @@ static int __init master_init(void)
 
     //register the device
     if( (ret = misc_register(&master_dev)) < 0){
-	printk(KERN_ERR "misc_register failed!\n");
-	return ret;
+    	printk(KERN_ERR "misc_register failed!\n");
+    	return ret;
     }
 
     printk(KERN_INFO "master has been registered!\n");
@@ -119,18 +119,18 @@ static int __init master_init(void)
     printk("sockfd_srv = 0x%p  socket is created \n", sockfd_srv);
     if (sockfd_srv == NULL)
     {
-	printk("socket failed\n");
-	return -1;
+    	printk("socket failed\n");
+    	return -1;
     }
     if (kbind(sockfd_srv, (struct sockaddr *)&addr_srv, addr_len) < 0)
     {
-	printk("bind failed\n");
-	return -1;
+    	printk("bind failed\n");
+    	return -1;
     }
     if (klisten(sockfd_srv, 10) < 0)
     {
-	printk("listen failed\n");
-	return -1;
+    	printk("listen failed\n");
+    	return -1;
     }
     printk("master_device init OK\n");
     set_fs(old_fs);
@@ -143,8 +143,8 @@ static void __exit master_exit(void)
     printk("misc_deregister\n");
     if(kclose(sockfd_srv) == -1)
     {
-	printk("kclose srv error\n");
-	return ;
+    	printk("kclose srv error\n");
+    	return ;
     }
     set_fs(old_fs);
     printk(KERN_INFO "master exited!\n");
@@ -175,42 +175,42 @@ static long master_ioctl(struct file *file, unsigned int ioctl_num, unsigned lon
     old_fs = get_fs();
     set_fs(KERNEL_DS);
     switch(ioctl_num){
-    case master_IOCTL_CREATESOCK:// create socket and accept a connection
-	sockfd_cli = kaccept(sockfd_srv, (struct sockaddr *)&addr_cli, &addr_len);
-	if (sockfd_cli == NULL)
-	{
-	    printk("accept failed\n");
-	    return -1;
-	}
-	else
-	    printk("aceept sockfd_cli = 0x%p\n", sockfd_cli);
+        case master_IOCTL_CREATESOCK:// create socket and accept a connection
+        	sockfd_cli = kaccept(sockfd_srv, (struct sockaddr *)&addr_cli, &addr_len);
+        	if (sockfd_cli == NULL)
+        	{
+        	    printk("accept failed\n");
+        	    return -1;
+        	}
+        	else
+        	    printk("aceept sockfd_cli = 0x%p\n", sockfd_cli);
 
-	tmp = inet_ntoa(&addr_cli.sin_addr);
-	printk("got connected from : %s %d\n", tmp, ntohs(addr_cli.sin_port));
-	kfree(tmp);
-	ret = 0;
-	break;
-    case master_IOCTL_MMAP:
-		ret = ksend(sockfd_cli, file->private_data, ioctl_param, 0);
-	break;
-    case master_IOCTL_EXIT:
-	if(kclose(sockfd_cli) == -1)
-	{
-	    printk("kclose cli error\n");
-	    return -1;
-	}
-	ret = 0;
-	break;
-    default:
-	pgd = pgd_offset(current->mm, ioctl_param);
-	p4d = p4d_offset(pgd, ioctl_param);
-	pud = pud_offset(p4d, ioctl_param);
-	pmd = pmd_offset(pud, ioctl_param);
-	ptep = pte_offset_kernel(pmd , ioctl_param);
-	pte = *ptep;
-	printk("master: %lX\n", pte);
-	ret = 0;
-	break;
+        	tmp = inet_ntoa(&addr_cli.sin_addr);
+        	printk("got connected from : %s %d\n", tmp, ntohs(addr_cli.sin_port));
+        	kfree(tmp);
+        	ret = 0;
+        	break;
+        case master_IOCTL_MMAP:
+        	ret = ksend(sockfd_cli, file->private_data, ioctl_param, 0);
+        	break;
+        case master_IOCTL_EXIT:
+        	if(kclose(sockfd_cli) == -1)
+        	{
+        	    printk("kclose cli error\n");
+        	    return -1;
+        	}
+        	ret = 0;
+        	break;
+        default:
+        	pgd = pgd_offset(current->mm, ioctl_param);
+        	p4d = p4d_offset(pgd, ioctl_param);
+        	pud = pud_offset(p4d, ioctl_param);
+        	pmd = pmd_offset(pud, ioctl_param);
+        	ptep = pte_offset_kernel(pmd , ioctl_param);
+        	pte = *ptep;
+        	printk("master: %lX\n", pte);
+        	ret = 0;
+        	break;
     }
 
     set_fs(old_fs);
@@ -232,7 +232,7 @@ static ssize_t send_msg(struct file *file, const char __user *buf, size_t count,
 // for mmap
 static int my_mmap(struct file *filp, struct vm_area_struct *vma)
 {
-	if (remap_pfn_range(vma,vma->vm_start,vma->vm_pgoff,vma->vm_end - vma->vm_start, vma->vm_page_prot))
+	if (remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff, vma->vm_end - vma->vm_start, vma->vm_page_prot))
 		return -EIO;
 	vma->vm_flags |= VM_RESERVED;
 	vma->vm_private_data = filp->private_data;
