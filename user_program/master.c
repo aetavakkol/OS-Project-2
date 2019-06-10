@@ -83,6 +83,7 @@ int main (int argc, char* argv[])
                     offset += len;
                     ioctl(dev_fd, 0x12345678, len);
                 } while (offset < file_size && offset % PAGE_SIZE != 0);
+                ioctl(dev_fd, 0x12345676, (unsigned long)src);
                 munmap(src, PAGE_SIZE);
             }
             break;
