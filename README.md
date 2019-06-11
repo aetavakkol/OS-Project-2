@@ -9,6 +9,9 @@
 * 醫學三 b05401009 謝德威
 * 電機五 b03901056 孫凡耕
 
+## Kernel Version
+**4.14.25**
+
 ## Usage
 ``./master_device`` : the device moudule for master server
 
