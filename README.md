@@ -30,7 +30,6 @@ To use it, please:
 2.execute "./compile.sh" to compile codes and install modules(if you want to run the bonus, please execute "./compile_bonus.sh")
 
 3.follow the input instrutions in the spec, 
-
 i.e.
 ./master ../data/file1_in mmap
 ./slave ../data/file1_out fcntl 127.0.0.1
