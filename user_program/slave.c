@@ -65,26 +65,26 @@ int main (int argc, char* argv[])
         	} while(ret > 0);
         	break;
         case 'm': //mmap
-        	while ((ret = read(dev_fd, buf, sizeof(buf))) > 0)
-        	{
-        	    if (file_size % mmap_size == 0) {
-            		if (file_size) {
+            while ((ret = read(dev_fd, buf, sizeof(buf))) > 0)
+            {
+                if (file_size % mmap_size == 0) {
+            	   if (file_size) {
                         ioctl(dev_fd, 0x12345676, (unsigned long)dst);
                         munmap(dst, mmap_size);
                     }
-            		ftruncate(file_fd, file_size+mmap_size);
-            		if((dst = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED, file_fd, file_size)) == (void *) -1) {
+            	   ftruncate(file_fd, file_size+mmap_size);
+            	   if((dst = mmap(NULL, mmap_size, PROT_READ | PROT_WRITE, MAP_SHARED, file_fd, file_size)) == (void *) -1) {
             		    perror("mapping output file");
-            		    return 1;
-            		}
-        	    }
-        	    memcpy(&dst[file_size%mmap_size], buf, ret);
-        	    file_size += ret;
-        	};
-        	ftruncate(file_fd, file_size);
+            	       return 1;
+            	   }
+                }
+                memcpy(&dst[file_size%mmap_size], buf, ret);
+                file_size += ret;
+            };
+            ftruncate(file_fd, file_size);
             ioctl(dev_fd, 0x12345676, (unsigned long)dst);
-        	munmap(dst, mmap_size);
-        	break;
+            munmap(dst, mmap_size);
+            break;
     }
 
     if(ioctl(dev_fd, 0x12345679) == -1)// end receiving data, close the connection
